@@ -3,6 +3,11 @@
 ## Introduction
 GUARD is a system designed to detect zero-day cyber-attacks using a combination of autoencoders and graph theory. It aims to identify threats that exploit unknown vulnerabilities by translating data relationships into a graph format.
 
+![3D Graph generated from known classes](outputs/3dgraphs/inferencing/graph_3d_1.png)
+
+*Figure: 3D Graph generated from known classes.*
+
+
 ## Status
 🚧 **Work in Progress**  
 This project is in active development. Features, documentation, and other aspects of the project are subject to change.
