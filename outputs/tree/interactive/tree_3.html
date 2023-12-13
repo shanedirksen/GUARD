@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Network Activity", "label": "Network Activity", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Normal", "label": "Normal", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Attacks", "label": "Attacks", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "DoS", "label": "DoS", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Probe", "label": "Probe", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "R2L", "label": "R2L", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "U2R", "label": "U2R", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "back", "label": "back", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "land", "label": "land", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "pod", "label": "pod", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "smurf", "label": "smurf", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "teardrop", "label": "teardrop", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mailbomb", "label": "mailbomb", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "processtable", "label": "processtable", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "udpstorm", "label": "udpstorm", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "apache2", "label": "apache2", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ipsweep", "label": "ipsweep", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "nmap", "label": "nmap", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "portsweep", "label": "portsweep", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "satan", "label": "satan", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mscan", "label": "mscan", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "saint", "label": "saint", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "unknown class", "label": "unknown class", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ftp_write", "label": "ftp_write", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "guess_passwd", "label": "guess_passwd", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "imap", "label": "imap", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "multihop", "label": "multihop", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "phf", "label": "phf", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "spy", "label": "spy", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "warezclient", "label": "warezclient", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "warezmaster", "label": "warezmaster", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sendmail", "label": "sendmail", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "named", "label": "named", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "snmpgetattack", "label": "snmpgetattack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "snmpguess", "label": "snmpguess", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "xlock", "label": "xlock", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "xsnoop", "label": "xsnoop", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "worm", "label": "worm", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "buffer_overflow", "label": "buffer_overflow", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "loadmodule", "label": "loadmodule", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "perl", "label": "perl", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "rootkit", "label": "rootkit", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "httptunnel", "label": "httptunnel", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ps", "label": "ps", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sqlattack", "label": "sqlattack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "xterm", "label": "xterm", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "Network Activity", "to": "Normal", "width": 1}, {"from": "Network Activity", "to": "Attacks", "width": 1}, {"from": "Attacks", "to": "DoS", "width": 1}, {"from": "Attacks", "to": "Probe", "width": 1}, {"from": "Attacks", "to": "R2L", "width": 1}, {"from": "Attacks", "to": "U2R", "width": 1}, {"from": "DoS", "to": "back", "width": 1}, {"from": "DoS", "to": "land", "width": 1}, {"from": "DoS", "to": "pod", "width": 1}, {"from": "DoS", "to": "smurf", "width": 1}, {"from": "DoS", "to": "teardrop", "width": 1}, {"from": "DoS", "to": "mailbomb", "width": 1}, {"from": "DoS", "to": "processtable", "width": 1}, {"from": "DoS", "to": "udpstorm", "width": 1}, {"from": "DoS", "to": "apache2", "width": 1}, {"from": "Probe", "to": "ipsweep", "width": 1}, {"from": "Probe", "to": "nmap", "width": 1}, {"from": "Probe", "to": "portsweep", "width": 1}, {"from": "Probe", "to": "satan", "width": 1}, {"from": "Probe", "to": "mscan", "width": 1}, {"from": "Probe", "to": "saint", "width": 1}, {"from": "Probe", "to": "unknown class", "width": 1}, {"from": "R2L", "to": "ftp_write", "width": 1}, {"from": "R2L", "to": "guess_passwd", "width": 1}, {"from": "R2L", "to": "imap", "width": 1}, {"from": "R2L", "to": "multihop", "width": 1}, {"from": "R2L", "to": "phf", "width": 1}, {"from": "R2L", "to": "spy", "width": 1}, {"from": "R2L", "to": "warezclient", "width": 1}, {"from": "R2L", "to": "warezmaster", "width": 1}, {"from": "R2L", "to": "sendmail", "width": 1}, {"from": "R2L", "to": "named", "width": 1}, {"from": "R2L", "to": "snmpgetattack", "width": 1}, {"from": "R2L", "to": "snmpguess", "width": 1}, {"from": "R2L", "to": "xlock", "width": 1}, {"from": "R2L", "to": "xsnoop", "width": 1}, {"from": "R2L", "to": "worm", "width": 1}, {"from": "U2R", "to": "buffer_overflow", "width": 1}, {"from": "U2R", "to": "loadmodule", "width": 1}, {"from": "U2R", "to": "perl", "width": 1}, {"from": "U2R", "to": "rootkit", "width": 1}, {"from": "U2R", "to": "httptunnel", "width": 1}, {"from": "U2R", "to": "ps", "width": 1}, {"from": "U2R", "to": "sqlattack", "width": 1}, {"from": "U2R", "to": "xterm", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"color": "skyblue"}, "edges": {"color": {"inherit": true}, "smooth": {"type": "continuous"}}, "physics": {"barnesHut": {"gravitationalConstant": -30000, "centralGravity": 0.3, "springLength": 95, "springConstant": 0.04, "damping": 0.09, "avoidOverlap": 0.1}, "minVelocity": 0.75}};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
