@@ -69,7 +69,7 @@ def compute_statistical_thresholds(G):
 def thresholds(G_test, error_mean, error_std, similarity_mean, similarity_std):
     true_labels = []
 
-    zscore = 3
+    zscore = 1
 
     hidden_nodes = [(node_id, data) for node_id, data in G_test.nodes(data=True) if data['attr_dict'].get('hidden')]
 
