@@ -23,7 +23,12 @@ def calculate_avg_class_weights(predicted_unknown_ids, G_test_known_only, le, un
                 class_weights_sum[class_name] = class_weights_sum.get(class_name, 0.0) + attributes['weight'].item()
                 class_counts[class_name] = class_counts.get(class_name, 0) + 1
 
-    avg_class_weights = {cls: weight_sum / class_counts[cls] for cls, weight_sum in class_weights_sum.items()}
+    avg_class_weights = {
+        cls: class_counts[cls] / sum(1 / weight for weight in class_weights_sum[cls]) 
+        if class_weights_sum[cls] else 0
+        for cls in class_weights_sum
+    }
+
 
     weighted_scores = {}
     for cls, avg_weight in avg_class_weights.items():
@@ -48,7 +53,11 @@ def calculate_avg_family_weights(avg_class_weights, family_map):
         family_weights_sum[family] = family_weights_sum.get(family, 0.0) + weight
         family_counts[family] = family_counts.get(family, 0) + 1
 
-    avg_family_weights = {family: weight_sum / family_counts[family] for family, weight_sum in family_weights_sum.items()}
+    avg_family_weights = {
+        family: family_counts[family] / sum(1 / weight for weight in weights if weight > 0)
+        if weights else 0
+        for family, weights in family_weights.items()
+    }
 
     return avg_family_weights
 
